@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Dorachan~ · Always Forever</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(145deg, #fbdee9 0%, #fccfdc 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Quicksand', 'Segoe UI', sans-serif;
+      padding: 1rem;
+      overflow-x: hidden;
+    }
+
+    /* Background Flower Particles */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .envelope-wrapper {
+      max-width: 850px;
+      width: 100%;
+      cursor: pointer;
+      filter: drop-shadow(0 25px 25px #f7a3bb);
+      z-index: 1;
+      transition: transform 0.3s;
+    }
+
+    .envelope {
+      background: linear-gradient(145deg, #ffd9d2, #ffcbc4);
+      border-radius: 45px 45px 30px 30px;
+      box-shadow: 0 18px 0 #ce7d96, 0 0 0 4px #fff9f7 inset;
+      padding: 2rem 1.5rem;
+      position: relative;
+      border: 4px solid #fff6f2;
+    }
+
+    /* Envelope Flap */
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: -38px;
+      left: 10%;
+      width: 80%;
+      height: 68px;
+      background: linear-gradient(145deg, #ffcbc4, #ffb8b0);
+      border-radius: 70px 70px 30px 30px;
+      box-shadow: 0 -10px 0 #ce7d96;
+      border: 4px solid #fff8f5;
+      clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 12% 100%);
+      transition: top 0.4s ease-in-out;
+      z-index: 5;
+    }
+
+    .envelope.open::before { top: -70px; }
+
+    .flap-heart {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      z-index: 10;
+      transition: top 0.4s;
+    }
+
+    .envelope.open .flap
