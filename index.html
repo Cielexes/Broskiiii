@@ -74,4 +74,190 @@
       transition: top 0.4s;
     }
 
-    .envelope.open .flap
+    .envelope.open .flap-heart { top: -55px; }
+
+    .flower-inside {
+      background: #fffcf9;
+      border-radius: 40px 20px 40px 20px;
+      padding: 1.5rem;
+      transition: opacity 0.4s, transform 0.4s;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .envelope:not(.open) .flower-inside {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+
+    /* Vertical Photo Gallery */
+    .photo-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .photo-frame {
+      width: 100%;
+      background: white;
+      border: 8px solid white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    .message-box {
+      background: #fff9f5;
+      border: 4px solid #ffc2cf;
+      border-radius: 30px 10px 30px 10px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 8px 0 #f7aec4;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .message-box p {
+      font-size: 1.2rem;
+      color: #a13557;
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .signature {
+      display: block;
+      margin-top: 20px;
+      text-align: right;
+      font-style: italic;
+      font-weight: bold;
+    }
+
+    .footer-names {
+      color: #ce7d96;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 10px 0;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="envelope-wrapper" id="envelopeWrapper">
+    <div class="envelope" id="envelope">
+      <div class="flap-heart">🥝❤️🌸</div>
+      
+      <div class="flower-inside">
+        <div class="photo-gallery">
+          <div class="photo-frame"><img src="IMG_20260214_173818.jpg"></div>
+          <div class="photo-frame"><img src="IMG_20260212_193240.jpg"></div>
+          <div class="photo-frame"><img src="IMG_20260214_173949.jpg"></div>
+          <div class="photo-frame"><img src="IMG_20260214_173925.jpg"></div>
+          <div class="photo-frame"><img src="IMG_20260214_173904.jpg"></div>
+        </div>
+
+        <div class="message-box">
+          <p>
+            Dearest Broski,<br><br>
+            Hmmm it's been quite long since we known each other. 3 months? 4 months? I dont know BWHAHAHA<br><br>
+            I'm really glad to have met you, thankyou for kidnapping the cute me 👾. Now you're stuck with me FOREVER (you're welcome😘)<br><br>
+            Anway, thankyouu so much for being a wonderful friend. Thankyou for blessing me with ur excellent music. Thankyou for being my slave hehehehehe<br><br>
+            I'm really glad to have met you ! BEST RAGE BAITER IK HAHAHAHA<br><br>
+            <span class="signature">You're bestttt friendoooo,<br>Kiwiwiwiwiwiwiiwiwiwiwiwiwiw</span>
+          </p>
+        </div>
+        
+        <div class="footer-names">
+          From: Kiwiwiwiwi🥝<br>
+          To: Dorachan~
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="Always forever.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // --- FLOWER PARTICLE SYSTEM ---
+    const pCanvas = document.getElementById('particleCanvas');
+    const pCtx = pCanvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+      pCanvas.width = window.innerWidth;
+      pCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Flower {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * pCanvas.width;
+        this.y = -20;
+        this.size = Math.random() * 8 + 4;
+        this.speed = Math.random() * 1 + 0.4;
+        this.angle = Math.random() * 6;
+        this.spin = Math.random() * 0.02 - 0.01;
+      }
+      update() {
+        this.y += this.speed;
+        this.angle += this.spin;
+        if (this.y > pCanvas.height) this.reset();
+      }
+      draw() {
+        pCtx.save();
+        pCtx.translate(this.x, this.y);
+        pCtx.rotate(this.angle);
+        pCtx.fillStyle = '#ffc1e3'; 
+        for(let i=0; i<5; i++) {
+          pCtx.rotate(Math.PI/2.5);
+          pCtx.beginPath();
+          pCtx.ellipse(0, 0, this.size, this.size/2, 0, 0, Math.PI*2);
+          pCtx.fill();
+        }
+        pCtx.restore();
+      }
+    }
+
+    for(let i=0; i<35; i++) particles.push(new Flower());
+
+    function animate() {
+      pCtx.clearRect(0,0, pCanvas.width, pCanvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // --- ENVELOPE INTERACTION ---
+    const envelope = document.getElementById('envelope');
+    const wrapper = document.getElementById('envelopeWrapper');
+    const audio = document.getElementById('bgMusic');
+
+    wrapper.addEventListener('click', () => {
+      const isOpen = envelope.classList.toggle('open');
+      if (isOpen) {
+        audio.play().catch(e => console.log("Music play blocked - usually fixed by user interaction like this click."));
+      } else {
+        audio.pause();
+      }
+    });
+  </script>
+</body>
+</html>
